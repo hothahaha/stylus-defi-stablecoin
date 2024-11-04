@@ -160,25 +160,9 @@ impl<T: Erc20Params> Erc20<T> {
         T::SYMBOL.into()
     }
 
-    /// Immutable token decimals
-    pub fn decimals() -> u8 {
-        T::DECIMALS
-    }
-
-    /// Total supply of tokens
-    pub fn total_supply(&self) -> U256 {
-        self.total_supply.get()
-    }
-
     /// Balance of `address`
     pub fn balance_of(&self, owner: Address) -> U256 {
         self.balances.get(owner)
-    }
-
-    /// Transfers `value` tokens from msg::sender() to `to`
-    pub fn transfer(&mut self, to: Address, value: U256) -> Result<bool, Erc20Error> {
-        self._transfer(msg::sender(), to, value)?;
-        Ok(true)
     }
 
     /// Transfers `value` tokens from `from` to `to`
@@ -209,17 +193,6 @@ impl<T: Erc20Params> Erc20<T> {
         self._transfer(from, to, value)?;
 
         Ok(true)
-    }
-
-    /// Approves the spenditure of `value` tokens of msg::sender() to `spender`
-    pub fn approve(&mut self, spender: Address, value: U256) -> bool {
-        self.allowances.setter(msg::sender()).insert(spender, value);
-        evm::log(Approval {
-            owner: msg::sender(),
-            spender,
-            value,
-        });
-        true
     }
 
     /// Returns the allowance of `spender` on `owner`'s tokens

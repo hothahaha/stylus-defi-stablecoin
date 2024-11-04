@@ -116,26 +116,6 @@ impl DecentralizedStableCoin {
         Ok(())
     }
 
-    pub fn transfer_ownership(
-        &mut self,
-        new_owner: Address,
-    ) -> Result<(), DecentralizedStableCoinError> {
-        self.only_owner()?;
-        self.owner.set(new_owner);
-        Ok(())
-    }
-
-    // Inherited methods from Erc20
-    pub fn transfer(
-        &mut self,
-        to: Address,
-        value: U256,
-    ) -> Result<bool, DecentralizedStableCoinError> {
-        self.erc20
-            .transfer(to, value)
-            .map_err(DecentralizedStableCoinError::Erc20Error)
-    }
-
     pub fn transfer_from(
         &mut self,
         from: Address,
@@ -145,14 +125,6 @@ impl DecentralizedStableCoin {
         self.erc20
             .transfer_from(from, to, value)
             .map_err(DecentralizedStableCoinError::Erc20Error)
-    }
-
-    pub fn approve(&mut self, spender: Address, value: U256) -> bool {
-        self.erc20.approve(spender, value)
-    }
-
-    pub fn allowance(&self, owner: Address, spender: Address) -> U256 {
-        self.erc20.allowance(owner, spender)
     }
 }
 
@@ -166,12 +138,3 @@ impl Default for DecentralizedStableCoin {
         }
     }
 }
-
-// 实现 EncodableReturnType trait for DecentralizedStableCoin
-/* impl EncodableReturnType for DecentralizedStableCoin {
-    fn encode(self) -> Vec<u8> {
-        // 由于 DecentralizedStableCoin 是一个复杂的结构体，我们可能需要自定义编码逻辑
-        // 这里我们简单地返回一个空的 Vec<u8>
-        Vec::new()
-    }
-} */
